@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Coin
   - Floor
+  - boton
   layers:
   - Default
   - TransparentFX

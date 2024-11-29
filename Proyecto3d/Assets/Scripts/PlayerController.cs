@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 
     // Elementos
     private Rigidbody rb;
+    private AudioSource audioSource; // Referencia al AudioSource
+    public AudioClip sonidoMoneda; // Audio para la moneda
 
     // Verificaciones
     public bool sePuedeMover;
@@ -36,6 +38,13 @@ public class PlayerController : MonoBehaviour
 
         // Bloquear las rotaciones en X y Z para que no ruede
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY;
+
+        // Obtener el AudioSource del jugador
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogError("No se ha encontrado un AudioSource en el jugador.");
+        }
     }
 
     private void Update()
@@ -48,56 +57,58 @@ public class PlayerController : MonoBehaviour
     }
 
    void caminar()
-{
-    float horizontal = Input.GetAxis("Horizontal");
-    float vertical = Input.GetAxis("Vertical");
-
-    // Crear dirección de movimiento en el plano
-    Vector3 direccionMovimiento = Camera.main.transform.right * horizontal + Camera.main.transform.forward * vertical;
-    direccionMovimiento.y = 0; // Evitar movimiento vertical
-
-    // Aplicar movimiento ajustando directamente la velocidad del Rigidbody
-    Vector3 nuevaVelocidad = direccionMovimiento.normalized * velocidadJugador;
-    nuevaVelocidad.y = rb.velocity.y; // Mantener la velocidad vertical actual
-    rb.velocity = nuevaVelocidad;
-
-    // Rotar el jugador para mirar en la dirección de movimiento
-    if (direccionMovimiento.magnitude > 0)
     {
-        Vector3 forward = Camera.main.transform.forward;
-        forward.y = 0; // Mantener solo el plano horizontal
-        Vector3 direction = Vector3.ProjectOnPlane(direccionMovimiento, Vector3.up); // Ignorar inclinación vertical
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
 
-        if (Vector3.Dot(forward, direction) > 0)
+        // Crear dirección de movimiento en el plano
+        Vector3 direccionMovimiento = Camera.main.transform.right * horizontal + Camera.main.transform.forward * vertical;
+        direccionMovimiento.y = 0; // Evitar movimiento vertical
+
+        // Aplicar movimiento ajustando directamente la velocidad del Rigidbody
+        Vector3 nuevaVelocidad = direccionMovimiento.normalized * velocidadJugador;
+        nuevaVelocidad.y = rb.velocity.y; // Mantener la velocidad vertical actual
+        rb.velocity = nuevaVelocidad;
+
+        // Rotar el jugador para mirar en la dirección de movimiento
+        if (direccionMovimiento.magnitude > 0)
         {
-            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionMovimiento);
+            Vector3 forward = Camera.main.transform.forward;
+            forward.y = 0; // Mantener solo el plano horizontal
+            Vector3 direction = Vector3.ProjectOnPlane(direccionMovimiento, Vector3.up); // Ignorar inclinación vertical
 
-            // Rotación suave del jugador
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * 5f); // Ajusta el factor para mayor suavidad
+            if (Vector3.Dot(forward, direction) > 0)
+            {
+                Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionMovimiento);
+
+                // Rotación suave del jugador
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo, Time.deltaTime * 5f); // Ajusta el factor para mayor suavidad
+            }
         }
     }
-}
-
 
     // Detectar cuando el jugador recoge una moneda
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Coin")) // Comprobar si el objeto tiene la etiqueta "Coin"
+        if (other.CompareTag("Coin"))
         {
             if (managerController != null)
             {
-                // Notificar al ManagerController que una moneda ha sido recogida
                 managerController.MonedaRecogida();
+            }
+
+            // Reproducir sonido de moneda
+            if (sonidoMoneda != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(sonidoMoneda); // Reproduce el sonido
+                Debug.Log("Sonido reproducido al recoger moneda");
             }
             else
             {
-                Debug.LogWarning("ManagerController no está asignado. No se puede notificar la recogida de la moneda.");
+                Debug.LogWarning("Sonido o AudioSource no configurado correctamente.");
             }
 
-            // Destruir la moneda
-            Destroy(other.gameObject);
-
-            // Mostrar el contador de monedas en la consola
+            Destroy(other.gameObject, 0.5f); // Destruir después de 0.5 segundos
             contadorMonedas++;
             Debug.Log("Monedas recogidas por el jugador: " + contadorMonedas);
         }
