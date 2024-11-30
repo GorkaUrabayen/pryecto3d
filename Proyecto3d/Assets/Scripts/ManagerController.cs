@@ -29,7 +29,7 @@ public class ManagerController : MonoBehaviour
         {
             Debug.Log("¡Todas las monedas recogidas! Cambiando a la escena Final...");
           
-            CambiarEscena();
+           // CambiarEscena(); // no va asique la unica manera de vovler al inicio es muriendo, esto crea una parodia en la que no importa lo que hagas solo puedes morir
            SceneManager.LoadScene("Final"); // Cambia a la escena Final
         }
     }
