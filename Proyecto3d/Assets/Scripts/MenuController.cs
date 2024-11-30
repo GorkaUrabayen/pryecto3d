@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement; // Necesario para cambiar de escena
 
 public class MenuController : MonoBehaviour
+//No se el porque no va en la escena Indromacion los botnes
 {
     // Nombres de las escenas
     public string nombreEscenaNivel1 = "Nivel1"; // Escena del primer nivel
@@ -26,7 +27,7 @@ public class MenuController : MonoBehaviour
     public void RegresarInicio()
     {
         Debug.Log("Regresando a la escena de inicio: " + nombreEscenaInicio);
-        SceneManager.LoadScene(nombreEscenaInicio);
+        SceneManager.LoadScene("nombreEscenaInicio");
     }
 
     // Método para salir del juego
