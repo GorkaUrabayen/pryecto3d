@@ -98,7 +98,7 @@ public class HumanoController : MonoBehaviour
         {
             // Si el humano choca con el suelo, puede reaccionar de alguna manera
             // En este caso, simplemente mostramos un mensaje
-            Debug.Log("El humano ha tocado el suelo.");
+           // Debug.Log("El humano ha tocado el suelo.");
         }
     }
 }

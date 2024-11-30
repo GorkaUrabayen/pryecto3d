@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
     private ManagerController managerController;
 
     // Tag para detectar  enemigos
-
     public string tagEnemigo = "Enemigo";
 
     // Nombre de la escena de inicio
@@ -109,7 +108,6 @@ public class PlayerController : MonoBehaviour
             if (sonidoMoneda != null && audioSource != null)
             {
                 audioSource.PlayOneShot(sonidoMoneda); // Reproduce el sonido
-                Debug.Log("Sonido reproducido al recoger moneda");
             }
             else
             {
@@ -139,8 +137,14 @@ public class PlayerController : MonoBehaviour
 
     private void MatarJugador()
     {
-        Debug.Log("Jugador muerto. Regresando a la escena de inicio.");
         estaMuerto = true;
+        // Agregar un pequeño retraso antes de cambiar de escena para darle tiempo al jugador de ver la animación o mensaje
+        Invoke("CambiarEscena", 2f); // 2 segundos de retraso antes de cambiar de escena
+    }
+
+    private void CambiarEscena()
+    {
+        // Aquí cambiamos a la escena de inicio después de la muerte del jugador
         SceneManager.LoadScene(nombreEscenaInicio);
     }
 }
