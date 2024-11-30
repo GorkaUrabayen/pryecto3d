@@ -2583,7 +2583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jugador: {fileID: 1609139770}
-  velocidad: 50
+  velocidad: 70
   distanciaDeteccion: 50
   layerSuelo:
     serializedVersion: 2
