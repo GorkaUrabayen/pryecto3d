@@ -27,7 +27,7 @@ public class MenuController : MonoBehaviour
     public void RegresarInicio()
     {
         Debug.Log("Regresando a la escena de inicio: " + nombreEscenaInicio);
-        SceneManager.LoadScene("nombreEscenaInicio");
+        SceneManager.LoadScene(nombreEscenaInicio);
     }
 
     // Método para salir del juego
