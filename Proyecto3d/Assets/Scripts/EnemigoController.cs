@@ -31,8 +31,8 @@ public class EnemigoController : MonoBehaviour
         audioSource.clip = sonidoEnemigo;
         
         // Aumentar el rango de escucha del sonido
-        audioSource.maxDistance = 200f; // Ajusta la distancia máxima según el tamaño del mapa
-        audioSource.minDistance = 50f;  // Distancia mínima a la que el sonido es "full volume"
+        audioSource.maxDistance = 300f; // Ajusta la distancia máxima según el tamaño del mapa
+        audioSource.minDistance = 100f;  // Distancia mínima a la que el sonido es "full volume"
         audioSource.rolloffMode = AudioRolloffMode.Linear; // Configurar la disminución lineal del volumen
 
         // Reproducir el sonido

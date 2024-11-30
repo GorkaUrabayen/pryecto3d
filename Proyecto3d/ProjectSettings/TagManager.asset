@@ -7,6 +7,8 @@ TagManager:
   - Coin
   - Floor
   - boton
+  - Enemigo
+  - Suelo
   layers:
   - Default
   - TransparentFX

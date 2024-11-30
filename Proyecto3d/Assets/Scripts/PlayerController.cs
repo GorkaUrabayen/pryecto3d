@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement; // Necesario para manejar escenas
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +23,13 @@ public class PlayerController : MonoBehaviour
 
     // Referencia al ManagerController
     private ManagerController managerController;
+
+    // Tag para detectar  enemigos
+
+    public string tagEnemigo = "Enemigo";
+
+    // Nombre de la escena de inicio
+    public string nombreEscenaInicio = "Inicio";
 
     private void Start()
     {
@@ -56,7 +64,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-   void caminar()
+    void caminar()
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -87,7 +95,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Detectar cuando el jugador recoge una moneda
+    // Detectar cuando el jugador recoge una moneda o choca con peligro/enemigo
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Coin"))
@@ -112,5 +120,27 @@ public class PlayerController : MonoBehaviour
             contadorMonedas++;
             Debug.Log("Monedas recogidas por el jugador: " + contadorMonedas);
         }
+
+        // Detectar colisión con un objeto enemigo
+        if (other.CompareTag(tagEnemigo))
+        {
+            MatarJugador();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Alternativa: Si usas colisiones normales en lugar de triggers
+        if (collision.gameObject.CompareTag(tagEnemigo))
+        {
+            MatarJugador();
+        }
+    }
+
+    private void MatarJugador()
+    {
+        Debug.Log("Jugador muerto. Regresando a la escena de inicio.");
+        estaMuerto = true;
+        SceneManager.LoadScene(nombreEscenaInicio);
     }
 }
